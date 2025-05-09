@@ -22,11 +22,11 @@ export type DocumentInviteEmailTemplateProps = Partial<TemplateDocumentInvitePro
 };
 
 export const DocumentInviteEmailTemplate = ({
-  inviterName = 'Lucas Smith',
-  inviterEmail = 'lucas@documenso.com',
-  documentName = 'Open Source Pledge.pdf',
-  signDocumentLink = 'https://documenso.com',
-  assetBaseUrl = 'http://localhost:3002',
+  inviterName = 'Signflow Team',
+  inviterEmail = 'noreply@signflow.com',
+  documentName = 'Document.pdf',
+  signDocumentLink = 'https://signflow.com',
+  assetBaseUrl = 'https://signflow.com',
   customBody,
   role,
   selfSigner = false,
@@ -35,8 +35,6 @@ export const DocumentInviteEmailTemplate = ({
   includeSenderDetails,
 }: DocumentInviteEmailTemplateProps) => {
   const { _ } = useLingui();
-  const branding = useBranding();
-
   const action = _(RECIPIENT_ROLES_DESCRIPTION[role].actionVerb).toLowerCase();
 
   let previewText = msg`${inviterName} has invited you to ${action} ${documentName}`;
@@ -59,65 +57,59 @@ export const DocumentInviteEmailTemplate = ({
     <Html>
       <Head />
       <Preview>{_(previewText)}</Preview>
-
-      <Body className="mx-auto my-auto bg-white font-sans">
+      <Body className="mx-auto my-auto bg-[#f8fafc] font-sans">
         <Section>
-          <Container className="mx-auto mb-2 mt-8 max-w-xl rounded-lg border border-solid border-slate-200 p-4 backdrop-blur-sm">
-            <Section>
-              {branding.brandingEnabled && branding.brandingLogo ? (
-                <Img src={branding.brandingLogo} alt="Branding Logo" className="mb-4 h-6" />
-              ) : (
-                <Img
-                  src={getAssetUrl('/static/logo.png')}
-                  alt="Documenso Logo"
-                  className="mb-4 h-6"
-                />
-              )}
-
-              <TemplateDocumentInvite
-                inviterName={inviterName}
-                inviterEmail={inviterEmail}
-                documentName={documentName}
-                signDocumentLink={signDocumentLink}
-                assetBaseUrl={assetBaseUrl}
-                role={role}
-                selfSigner={selfSigner}
-                isTeamInvite={isTeamInvite}
-                teamName={teamName}
-                includeSenderDetails={includeSenderDetails}
+          <Container className="mx-auto mb-2 mt-8 max-w-xl rounded-2xl border border-solid border-slate-200 bg-white p-8 shadow-xl">
+            <Section className="flex flex-col items-center">
+              <Img
+                src={getAssetUrl('/static/signflow-logo.png')}
+                alt="Signflow Logo"
+                className="mb-6 h-10 mx-auto"
               />
-            </Section>
-          </Container>
-
-          <Container className="mx-auto mt-12 max-w-xl">
-            <Section>
-              {!isTeamInvite && (
-                <Text className="my-4 text-base font-semibold">
-                  <Trans>
-                    {inviterName}{' '}
-                    <Link className="font-normal text-slate-400" href="mailto:{inviterEmail}">
-                      ({inviterEmail})
-                    </Link>
-                  </Trans>
-                </Text>
-              )}
-
-              <Text className="mt-2 text-base text-slate-400">
+              <Text className="text-2xl font-bold text-center text-gray-900 mb-2">
+                {isTeamInvite ? (
+                  <Trans>You've been invited to collaborate on a document</Trans>
+                ) : (
+                  <Trans>You've been invited to sign a document</Trans>
+                )}
+              </Text>
+              <Text className="text-base text-center text-gray-700 mb-6">
                 {customBody ? (
-                  <pre className="font-sans text-base text-slate-400">{customBody}</pre>
+                  <pre className="font-sans text-base text-gray-700 whitespace-pre-wrap">{customBody}</pre>
                 ) : (
                   <Trans>
                     {inviterName} has invited you to {action} the document "{documentName}".
                   </Trans>
                 )}
               </Text>
+              <a
+                href={signDocumentLink}
+                style={{
+                  display: 'inline-block',
+                  background: '#2563eb',
+                  color: '#fff',
+                  padding: '12px 32px',
+                  borderRadius: '8px',
+                  fontWeight: 600,
+                  fontSize: '16px',
+                  textDecoration: 'none',
+                  marginBottom: '24px',
+                }}
+              >
+                <Trans>Open Document</Trans>
+              </a>
+              <Hr className="my-8" />
+              <Text className="text-xs text-center text-gray-400">
+                If you have questions, contact us at <a href="mailto:support@signflow.com" style={{ color: '#2563eb' }}>support@signflow.com</a>.
+              </Text>
             </Section>
           </Container>
-
-          <Hr className="mx-auto mt-12 max-w-xl" />
-
-          <Container className="mx-auto max-w-xl">
-            <TemplateFooter />
+          <Container className="mx-auto mt-8 max-w-xl">
+            <Section>
+              <Text className="text-center text-xs text-gray-400 mt-8">
+                Signflow Pty Ltd<br />90 King William Street, Adelaide SA 5000
+              </Text>
+            </Section>
           </Container>
         </Section>
       </Body>

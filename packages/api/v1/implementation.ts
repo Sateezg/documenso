@@ -59,23 +59,48 @@ import { authenticatedMiddleware } from './middleware/authenticated';
 
 export const ApiContractV1Implementation = tsr.router(ApiContractV1, {
   getDocuments: authenticatedMiddleware(async (args, user, team) => {
-    const page = Number(args.query.page) || 1;
-    const perPage = Number(args.query.perPage) || 10;
+    try {
+      const page = Number(args.query.page) || 1;
+      const perPage = Number(args.query.perPage) || 10;
 
-    const { data: documents, totalPages } = await findDocuments({
-      page,
-      perPage,
-      userId: user.id,
-      teamId: team?.id,
-    });
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
 
-    return {
-      status: 200,
-      body: {
-        documents,
-        totalPages,
-      },
-    };
+      const { data: documents, totalPages } = await findDocuments({
+        page,
+        perPage,
+        userId: user.id,
+        teamId: team?.id,
+      });
+
+      return {
+        status: 200,
+        body: {
+          documents,
+          totalPages,
+        },
+      };
+    } catch (err) {
+      console.error('Error in getDocuments:', err);
+      
+      if (err instanceof Error) {
+        return {
+          status: 500,
+          body: {
+            message: err.message || 'Internal server error while fetching documents.',
+            error: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+          },
+        };
+      }
+
+      return {
+        status: 500,
+        body: {
+          message: 'Internal server error while fetching documents.',
+        },
+      };
+    }
   }),
 
   getDocument: authenticatedMiddleware(async (args, user, team) => {

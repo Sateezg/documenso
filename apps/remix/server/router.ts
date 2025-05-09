@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { contextStorage } from 'hono/context-storage';
+import { cors } from 'hono/cors';
 
 import { tsRestHonoApp } from '@documenso/api/hono';
 import { auth } from '@documenso/auth/server';
@@ -31,6 +32,23 @@ app.use(appContext);
  * RR7 app middleware.
  */
 app.use('*', appMiddleware);
+
+// Enable CORS for all API routes
+app.use(
+  '*',
+  cors({
+    origin: [
+      'http://localhost:5173',
+      'https://documenso-remix-ten.vercel.app',
+      'https://signdocument-u43796.vm.elestio.app',
+      '*', // Allow all origins for development; remove in production for security
+    ],
+    allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    maxAge: 600,
+  })
+);
 
 // Auth server.
 app.route('/api/auth', auth);
