@@ -57,7 +57,7 @@
     "turbo": "^1.9.3",
     "vite": "^6.1.0"
   },
-  "name": "@documenso/root",
+  "name": "@signflow/root",
   "workspaces": [
     "apps/*",
     "packages/*"

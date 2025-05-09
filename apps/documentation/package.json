@@ -1,5 +1,5 @@
 {
-  "name": "@documenso/documentation",
+  "name": "@signflow/documentation",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,11 +10,11 @@
     "clean": "rimraf .next && rimraf node_modules"
   },
   "dependencies": {
-    "@documenso/assets": "*",
-    "@documenso/lib": "*",
-    "@documenso/tailwind-config": "*",
-    "@documenso/trpc": "*",
-    "@documenso/ui": "*",
+    "@signflow/assets": "*",
+    "@signflow/lib": "*",
+    "@signflow/tailwind-config": "*",
+    "@signflow/trpc": "*",
+    "@signflow/ui": "*",
     "next": "14.2.6",
     "next-plausible": "^3.12.0",
     "nextra": "^2.13.4",
